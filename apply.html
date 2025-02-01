@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        #videoBackground {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .response-button, .next-button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin: 10px; /* Space between buttons */
+        }
+
+        .response-button:hover, .next-button:hover {
+            background-color: #ff1f5b;
+            transform: scale(1.1);
+        }
+
+        .celebration-message, .decline-message {
+            display: none;
+            font-size: 3em;
+            margin-top: 20px;
+            color: #ff4081;
+        }
+
+        /* Bubble styles */
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Heart styles */
+        .heart {
+            position: absolute;
+            bottom: -100px;
+            font-size: 2em;
+            color: rgba(255, 0, 0, 0.7);
+            animation: fly 5s infinite;
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-50vh) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            .response-button, .next-button {
+                font-size: 1.2em;
+                padding: 10px 20px;
+            }
+            .celebration-message, .decline-message {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <video id="videoBackground" autoplay muted loop>
+        <source src="mylivewallpapers-com-Coffee-Date-4K.mp4" type="video/mp4"> <!-- Replace with your video file -->
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="overlay">
+        <h1 id="slideTitle">There's something I wanna ask you😳🫣👉👈</h1>
+        <div class="button-container">
+            <button class="next-button" id="nextButton" onclick="nextQuestion()" aria-label="Next question">Next</button>
+            <button class="response-button" id="yesButton" onclick="handleYes()" style="display: none;" aria-label="Yes response">Yes</button>
+            <button class="response-button" id="noButton" onclick="handleNo()" style="display: none;" aria-label="No response">No</button>
+        </div>
+        <div class="celebration-message" id="celebrationMessage">Yay! I'm so happy you said yes! ❤️🥹🫂</div>
+        <div class="decline-message" id="declineMessage">no is not accepted reload the page and click yes understand 😤</div>
+    </div>
+
+    <audio id="celebrationMusic" preload="auto">
+        <source src="Never Shout Never - Trouble (Lyrics).mp3" type="audio/mpeg"> <!-- Replace with your audio file -->
+        Your browser does not support the audio tag.
+    </audio>
+
+    <script>
+        const questions = [
+            "There's something I wanna ask you",
+            "And I'm kinda shy",
+            "Uhh...",
+            "Will you be my Valentine?"
+        ];
+
+        let currentQuestion = 0;
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length) {
+                document.getElementById('slideTitle').innerText = questions[currentQuestion];
+                currentQuestion++;
+            }
+
+            if (currentQuestion === questions.length) {
+                // Show the response buttons after the last question
+                document.getElementById('yesButton').style.display = 'inline-block';
+                document.getElementById('noButton').style.display = 'inline-block';
+                document.getElementById('nextButton').style.display = 'none'; // Hide Next button
+            }
+        }
+
+        function handleYes() {
+            const celebrationMessage = document.getElementById('celebrationMessage');
+            celebrationMessage.style.display = 'block'; // Show celebration message
+            document.getElementById('yesButton').style.display = 'none'; // Hide Yes button
+            document.getElementById('noButton').style.display = 'none'; // Hide No button
+            document.getElementById('celebrationMusic').play(); // Play music
+        }
+
+        function handleNo() {
+            const declineMessage = document.getElementById('declineMessage');
+            declineMessage.style.display = 'block'; // Show decline message
+            document.getElementById('yesButton').style.display = 'none'; // Hide Yes button
+            document.getElementById('noButton').style.display = 'none'; // Hide No button
+        }
+
+        // Function to create bubbles
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 50 + 20; // Random size between 20 and 70
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+            document.body.appendChild(bubble);
+
+            // Remove bubble after animation
+            bubble.addEventListener('animationend', () => {
+                bubble.remove();
+            });
+        }
+
+        // Create bubbles at intervals
+        setInterval(createBubble, 1000); // Create a bubble every second
+
+        // Function to create flying hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️'; // Heart emoji
+            heart.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+            document.body.appendChild(heart);
+
+            // Remove heart after animation
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+            });
+        }
+
+        // Create hearts at intervals
+        setInterval(createHeart, 2000); // Create a heart every 2 seconds
+    </script>
+</body>
+</html>
